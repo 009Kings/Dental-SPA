@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from './components/partials/Header'
+import Home from './components/pages/Home'
+import Services from './components/pages/Services'
+import Contact from './components/pages/Contact'
+import Service from './components/pages/Service'
+
+import serviceDetails from './data/service-details'
+
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Header />
+        <main>
+          <Route exact path="/" component={Home} />
+          <Route path="/services" render={() => <Services services={serviceDetails} />} />
+          <Route path='/services/:id' render={(props) => {
+						const service = serviceDetails.find(service => service.id.toString() === props.match.params.id)
+						props = {...props, ...service}
+						return <Service {...props} />
+					}} />
+          <Route path="/contact" component={Contact} />
+        </main>
+      </Router>
+    )
+  }
 }
 
-export default App;
+export default App
